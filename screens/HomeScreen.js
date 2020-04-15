@@ -4,50 +4,52 @@ import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react
 import { ScrollView } from 'react-native-gesture-handler';
 
 import { MonoText } from '../components/StyledText';
+import SimpleMap from '../components/MapComponent';
 
 export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
         <View style={styles.welcomeContainer}>
-          <Image
+          {/* <Image
             source={
               __DEV__
                 ? require('../assets/images/robot-dev.png')
                 : require('../assets/images/robot-prod.png')
             }
             style={styles.welcomeImage}
-          />
+          /> */}
         </View>
 
         <View style={styles.getStartedContainer}>
-          <DevelopmentModeNotice />
+          <SimpleMap/>
+          {/* <DevelopmentModeNotice /> */}
 
-          <Text style={styles.getStartedText}>Open up the code for this screen:</Text>
+          {/* <Text style={styles.getStartedText}>Open up the code for this screen:</Text> */}
 
-          <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
+          {/* <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
             <MonoText>screens/HomeScreen.js</MonoText>
-          </View>
+          </View> */}
 
-          <Text style={styles.getStartedText}>
+          {/* <Text style={styles.getStartedText}>
             Change any of the text, save the file, and your app will automatically reload.
-          </Text>
+          </Text> */}
         </View>
 
-        <View style={styles.helpContainer}>
+        {/* <View style={styles.helpContainer}>
           <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
             <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
       </ScrollView>
 
-      <View style={styles.tabBarInfoContainer}>
+      {/* <View style={styles.tabBarInfoContainer}>
         <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
 
         <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
           <MonoText style={styles.codeHighlightText}>navigation/BottomTabNavigator.js</MonoText>
         </View>
-      </View>
+      </View> */}
     </View>
   );
 }

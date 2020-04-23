@@ -1,2 +1,2 @@
 # corona-native
-This is the native version of the 'coronapp' project written in reactjs 
+This is the native version of my 'coronapp' project that was written in reactjs 

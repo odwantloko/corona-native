@@ -4,6 +4,9 @@ import * as React from 'react';
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
+import AfricaScreen from '../screens/AfricaScreen';
+import GlobalScreen from '../screens/GlobalScreen';
+
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Home';
@@ -20,15 +23,23 @@ export default function BottomTabNavigator({ navigation, route }) {
         name="Home"
         component={HomeScreen}
         options={{
-          title: 'Corona Map',
+          title: 'Home Map',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-map" />,
         }}
       />
       <BottomTab.Screen
-        name="Links"
-        component={LinksScreen}
+        name="Africa"
+        component={AfricaScreen}
         options={{
-          title: 'Corona Stats',
+          title: 'Africa\'s Stats',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-browsers" />,
+        }}
+      />
+        <BottomTab.Screen
+        name="Global"
+        component={GlobalScreen}
+        options={{
+          title: 'Global Stats',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-browsers" />,
         }}
       />
@@ -42,7 +53,9 @@ function getHeaderTitle(route) {
   switch (routeName) {
     case 'Home':
       return 'The Rona Visualizer';
-    case 'Links':
-      return 'The Rona Country Stats';
+    case 'Global':
+      return 'Global Stats';
+    case 'Africa':
+      return 'Africa\'s Stats';
   }
 }

@@ -1,20 +1,21 @@
-import React, { Component } from "react";
-import { Platform, StyleSheet, Text, View } from 'react-native';
 
-
-export default class GlobalStats extends Component {
-
-	constructor(props){
-		super(props);
-		this.state = { 
-			data: [{}],
-			CountryCodes: null
-		}
-	}
-
+import React, { Component } from 'react';
+import { StyleSheet, View, ScrollView } from 'react-native';
+import { Table, TableWrapper, Row, Rows, Col, Cols } from 'react-native-table-component';
  
+export default class GlobalStats extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      tableHead: ['Highest','Country','Total Confirmed','Total Deaths', 'Total Recoveries','Last Updated'],
+      widthArr: [50, 90, 90, 90, 90, 120], 
+      data: [{}],
+      CountryCodes: null
+    
+    }
+  }
 
-  componentDidMount = () => {
+componentDidMount = () => {
     let postOptions = {};
     postOptions.method = 'GET';
     postOptions.headers = {};
@@ -40,16 +41,61 @@ export default class GlobalStats extends Component {
 		
     }).catch(console.log)
   
-  }
+}
 
-	render() {
-		return (
-			<View>
-				 <Text> Global Stats</Text>
-
-			</View>
-
-		);
+  
+  render() {
+    const state = this.state;
+    const stats = this.state.data;
+    const tableData = [];
+    for (let i = 0; i < stats.length ; i ++) {
+      const rowData = [];
+      rowData.push(i+1);
+      rowData.push(stats[i].Country);
+      rowData.push(stats[i].TotalConfirmed);
+      rowData.push(stats[i].TotalDeaths);
+      rowData.push(stats[i].TotalRecovered);
+      rowData.push(stats[i].Date);
+      tableData.push(rowData);  
     }
+   
+    return (
+      <View style={styles.container}>
+        <ScrollView horizontal={true}>
+          <View>
+            <Table borderStyle={{borderWidth: 1, borderColor: '#C1C0B9'}}>
+              <Row data={state.tableHead} widthArr={state.widthArr} style={styles.header} textStyle={styles.headerText}/>
+            </Table>
+            <ScrollView style={styles.dataWrapper}>
+              <Table borderStyle={{borderWidth: 1, borderColor: '#C1C0B9'}}>
+                {
+                  tableData.map((rowData, index) => (
+                    <Row
+                      key={index}
+                      data={rowData}
+                      widthArr={state.widthArr}
+                      style={[styles.row, index%2 && {backgroundColor: '#fff'}]}
+                      textStyle={styles.text}
 
-};
+                   
+                    />
+                  ))
+                }
+
+              </Table>
+            </ScrollView>
+          </View>
+        </ScrollView>
+      </View>
+    )
+  }
+}
+  
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
+  header: { height: 50, backgroundColor: '#ff5852' },
+  headerText: { textAlign: 'center', fontWeight: '500', color:'#ffffff', fontSize: 13 },
+  text: { textAlign: 'center', fontWeight: '300' },
+  dataWrapper: { marginTop: -1 },
+  row: { height: 40, backgroundColor: '#ffbaba' }
+});

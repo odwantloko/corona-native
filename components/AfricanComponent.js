@@ -90,16 +90,13 @@ export default class AricanComponent extends Component {
                       key={index}
                       data={rowData}
                       widthArr={state.widthArr}
-                      style={[styles.row, index%2 && {backgroundColor: '#F7F6E7'}]}
+                      style={[styles.row, index%2 && {backgroundColor: '#fff'}]}
                       textStyle={styles.text}
 
                    
                     />
                   ))
                 }
-                   {/* <Col data={state.tableHead} style={styles.title} heightArr={[28,28]} textStyle={styles.text}/>
-                  <Rows data={tableData} flexArr={[2, 1, 1,1,1,1]} style={styles.row}/> */}
-
               </Table>
             </ScrollView>
           </View>
@@ -111,9 +108,9 @@ export default class AricanComponent extends Component {
   
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
-  header: { height: 50, backgroundColor: '#a9a9a9' },
+  header: { height: 50, backgroundColor: '#ffce52' },
   headerText: { textAlign: 'center', fontWeight: '500', color:'#ffffff', fontSize:13 },
-  text: { textAlign: 'center', fontWeight: '100' },
+  text: { textAlign: 'center', fontWeight: '300' },
   dataWrapper: { marginTop: -1 },
-  row: { height: 40, backgroundColor: '#E7E6E1' }
+  row: { height: 40, backgroundColor: '#fff7ba' }
 });

@@ -8,8 +8,8 @@ export default class AricanComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tableHead: ['Highest','Country','Total Confirmed','Total Deaths', 'Total Recoveries','Last Updated'],
-      widthArr: [50, 90, 90, 90, 90, 120], 
+      tableHead: ['Highest','Country','Total Confirmed','Total Deaths','', 'Total Recoveries','','Last Updated'],
+      widthArr:[50, 120, 90, 90, 55,90, 55,110], 
       data: [{}],
       CountryCodes: null,
       countries: Africa
@@ -30,30 +30,49 @@ export default class AricanComponent extends Component {
         .then((data) => {
           
           values = data.Countries;
-          var african_stats= [];
-          var countries = this.state.countries;
-          // Extract African stats from global stats
-          for (let i = 0; i < values.length; i++){
-            delete values[i].Slug;
-            delete values[i].NewConfirmed; 
-            delete values[i].NewDeaths; 
-            delete values[i].NewRecovered; 
+          values.sort( (a,b) => b.TotalConfirmed - a.TotalConfirmed);
 
-            for (let j = 0; j < countries.length; j++){
+          let african_stats= [];
+          let countries = this.state.countries;
+		
 
-                if(values[i].CountryCode === countries[j].Country_Code){
-                  delete values[i].CountryCode; 
-                  values[i].Date =new Date(values[i].Date).toLocaleString(); 
+        // Extract African stats from global stats
+        for (let i = 0; i < values.length; i++){
+          let DeathRatio = (values[i].TotalDeaths/values[i].TotalConfirmed * 100).toFixed(2);
+          let RecoveryRatio = (values[i].TotalRecovered/values[i].TotalConfirmed * 100).toFixed(2);
+          let obj = {};
+          for (let j = 0; j < countries.length; j++){
 
-                  african_stats.push(values[i]);
-                }
+            if(values[i].CountryCode === countries[j].Country_Code){
+              if(RecoveryRatio !=="NaN"){
+                obj.Country = values[i].Country;
+                obj.TotalConfirmed = values[i].TotalConfirmed;
+                obj.TotalDeaths = values[i].TotalDeaths;
+                obj.DeathRatio = DeathRatio + "%";
+                obj.TotalRecovered = values[i].TotalRecovered;
+                obj.RecoveryRatio = RecoveryRatio +"%";
+                obj.Date = new Date(values[i].Date).toLocaleString();
               
-            }
-  
+                
+              }else{
+                obj.Country = values[i].Country;
+                obj.TotalConfirmed = values[i].TotalConfirmed;
+                obj.TotalDeaths = values[i].TotalDeaths;
+                obj.DeathRatio = "0.00%";
+                obj.TotalRecovered = values[i].TotalRecovered;
+                obj.RecoveryRatio ="0.00%";
+                obj.Date = new Date(values[i].Date).toLocaleString();
+              }
+              
+              african_stats.push(obj);
+                  
+                  }
+              
+              }
+
           }
-          // sort according to number of cases
-          african_stats.sort( (a,b) => b.TotalConfirmed - a.TotalConfirmed);
-          this.setState({data: african_stats})
+
+        this.setState({data: african_stats})
     
     }).catch(console.log)
   
@@ -70,7 +89,9 @@ export default class AricanComponent extends Component {
       rowData.push(stats[i].Country);
       rowData.push(stats[i].TotalConfirmed);
       rowData.push(stats[i].TotalDeaths);
+      rowData.push(stats[i].DeathRatio);
       rowData.push(stats[i].TotalRecovered);
+      rowData.push(stats[i].RecoveryRatio);
       rowData.push(stats[i].Date);
       tableData.push(rowData);  
     }

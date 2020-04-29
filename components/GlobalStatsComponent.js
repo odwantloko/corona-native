@@ -7,8 +7,8 @@ export default class GlobalStats extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tableHead: ['Highest','Country','Total Confirmed','Total Deaths', 'Total Recoveries','Last Updated'],
-      widthArr: [50, 90, 90, 90, 90, 120], 
+      tableHead: ['Highest','Country','Total Confirmed','Total Deaths','', 'Total Recoveries','','Last Updated'],
+      widthArr: [50, 120, 90, 90, 55,90, 55,110], 
       data: [{}],
       CountryCodes: null
     
@@ -20,24 +20,49 @@ componentDidMount = () => {
     postOptions.method = 'GET';
     postOptions.headers = {};
   
-	let values = [{}];
+  let values = [{}];
+  let arr = [];
+
 		
     fetch('https://api.covid19api.com/summary', postOptions)
         .then(res => res.json())
         .then((data) => {
-		console.log(data.Countries[0].CountryCode)
 
-		values = data.Countries
-		values.forEach(function(item){ 
-			delete item.Slug; 
-			delete item.CountryCode; 
-			delete item.NewConfirmed; 
-			delete item.NewDeaths; 
-			delete item.NewRecovered; 
-			item.Date =new Date(item.Date).toLocaleString(); 
-		});
-		values.sort( (a,b) => b.TotalConfirmed - a.TotalConfirmed);
-		this.setState({data: values})
+    values = data.Countries
+    values.sort( (a,b) => b.TotalConfirmed - a.TotalConfirmed);
+      
+			
+		for (let i=0; i < values.length; i++){
+			let obj ={};
+			let DeathRatio = (values[i].TotalDeaths/values[i].TotalConfirmed * 100).toFixed(2);
+			let RecoveryRatio = (values[i].TotalRecovered/values[i].TotalConfirmed * 100).toFixed(2);
+
+			if(RecoveryRatio !=="NaN"){
+				obj.Country = values[i].Country;
+				obj.TotalConfirmed = values[i].TotalConfirmed;
+				obj.TotalDeaths = values[i].TotalDeaths;
+				obj.DeathRatio = DeathRatio + "%";
+				obj.TotalRecovered = values[i].TotalRecovered;
+				obj.RecoveryRatio = RecoveryRatio +"%";
+				obj.Date = new Date(values[i].Date).toLocaleString();
+			
+				
+			}else{
+				obj.Country = values[i].Country;
+				obj.TotalConfirmed = values[i].TotalConfirmed;
+				obj.TotalDeaths = values[i].TotalDeaths;
+				obj.DeathRatio = "0.00%";
+				obj.TotalRecovered = values[i].TotalRecovered;
+				obj.RecoveryRatio ="0.00%";
+				obj.Date = new Date(values[i].Date).toLocaleString();
+			}
+
+
+			
+			arr.push(obj)
+		}
+		
+		this.setState({data: arr})
 		
     }).catch(console.log)
   
@@ -54,7 +79,9 @@ componentDidMount = () => {
       rowData.push(stats[i].Country);
       rowData.push(stats[i].TotalConfirmed);
       rowData.push(stats[i].TotalDeaths);
+      rowData.push(stats[i].DeathRatio);
       rowData.push(stats[i].TotalRecovered);
+      rowData.push(stats[i].RecoveryRatio);
       rowData.push(stats[i].Date);
       tableData.push(rowData);  
     }
